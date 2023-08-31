@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
@@ -25,3 +25,7 @@ def info():
 @app.route('/flask-health-check')
 def flask_health_check():
 	return "success"
+
+@app.route('/hello-papa')
+def hello_papa():
+	return render_template('hello-papa.html')
