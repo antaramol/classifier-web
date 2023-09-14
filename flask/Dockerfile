@@ -29,7 +29,7 @@ RUN export FLASK_APP=app.py
 # upgrade pip
 RUN pip install --upgrade pip
 
-RUN pip install 'transformers[torch]'
+# RUN pip install 'transformers[torch]'
 
 RUN pip install -r requirements.txt
 
