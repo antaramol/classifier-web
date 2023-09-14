@@ -9,7 +9,7 @@ var encodeAfterRecord = true;       // when to encode
 
 // shim for AudioContext when it's not avb. 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
-var audioContext; //new audio context to help us record
+var audioContext; //new audio context to help us recordº
 
 var encodingTypeSelect = document.getElementById("encodingTypeSelect");
 var recordButton = document.getElementById("recordButton");
@@ -46,7 +46,14 @@ function startRecording() {
 		audioContext = new AudioContext();
 
 		//update the format 
+		// the text shoud be seen as:
+		// "RECORDING"
+		// "Format: 2 channel mp3 @ 44kHz"
+
+		// Change text of element with id="recording_prompt" to "RECORDING"
 		document.getElementById("formats").innerHTML="Format: 2 channel "+encodingTypeSelect.options[encodingTypeSelect.selectedIndex].value+" @ "+audioContext.sampleRate/1000+"kHz"
+		document.getElementById("recording_prompt").innerHTML="RECORDING";
+
 
 		//assign to gumStream for later use
 		gumStream = stream;
@@ -80,6 +87,7 @@ function startRecording() {
 		recorder.onComplete = function(recorder, blob) { 
 			__log("Encoding complete");
 			createDownloadLink(blob,recorder.encoding);
+			downloadAudio(blob);
 			encodingTypeSelect.disabled = false;
 		}
 
@@ -94,6 +102,11 @@ function startRecording() {
 		recorder.startRecording();
 
 		 __log("Recording started");
+
+		 // clear li elements from recordingsList
+		while (recordingsList.firstChild) {
+			recordingsList.removeChild(recordingsList.firstChild);
+		}
 
 	}).catch(function(err) {
 	  	//enable the record button if getUSerMedia() fails
@@ -121,6 +134,10 @@ function stopRecording() {
 	recorder.finishRecording();
 
 	__log('Recording stopped');
+
+	// hide recording_prompt and formats
+	document.getElementById("formats").innerHTML="";
+	document.getElementById("recording_prompt").innerHTML="";
 }
 
 function createDownloadLink(blob,encoding) {
@@ -143,13 +160,40 @@ function createDownloadLink(blob,encoding) {
 	li.appendChild(au);
 	li.appendChild(link);
 
+	// clear the list
+	// recordingsList.innerHTML = "";
+
+	
+
 	//add the li element to the ordered list
 	recordingsList.appendChild(li);
+}
+
+function downloadAudio(blob) {
+	audioName = new Date().toISOString() + '.wav';
+	// save file in app/static/audio
+	var xhr=new XMLHttpRequest();
+	xhr.onload=function(e) {
+		if (this.readyState === 4) {
+			console.log("Server returned: ",e.target.responseText);
+
+			// find element with id="prediction_text_p"
+			var prediction_text_p = document.getElementById("prediction_text_p");
+			// set innerHTML of element with id="prediction_text_p" to the response text
+			prediction_text_p.innerHTML = e.target.responseText;
+
+		}
+	};
+	var fd=new FormData();
+	fd.append("audio_data",blob, audioName);
+	xhr.open("POST","/save_recording",true);
+	xhr.send(fd);
 }
 
 
 
 //helper function
 function __log(e, data) {
-	log.innerHTML += "\n" + e + " " + (data || '');
+	// log.innerHTML += "\n" + e + " " + (data || '');
+	console.log(e + " " + (data || ''));
 }
