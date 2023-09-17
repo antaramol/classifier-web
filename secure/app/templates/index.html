@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Speech Recognition in Python</title>
+    <title>Emotion classifier web server</title>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" />
 
@@ -11,9 +11,9 @@
 
 </head>
 <body>
-    <h1>Transcribe your voice to text </h1>
-    <br><br>
-    <h3>Step 1 - Record your voice</h3>
+    <h1>Emotions classifier </h1>
+    <br>
+    <h3>Record your voice</h3>
     <br>
     <div style="max-width: 28em;">
 		<p>Convert recorded audio to wav:</p>
@@ -25,17 +25,19 @@
 			<button id="recordButton">Record</button>
 			<button id="stopButton" disabled>Stop</button>
 		</div>
+
+        <div id="recording_prompt"></div>
 		<div id="formats"></div>
-		<pre>Log</pre>
-		<pre id="log"></pre>
+		<!-- <pre>Log</pre>
+		<pre id="log"></pre> -->
         <br>
-        <h3>Step 2 - Download your record </h3> 
+        <!-- <h3>Step 2 - Download your record </h3>  -->
 		
 		<ol id="recordingsList"></ol>
 	</div>
 
-    <div id="speechContainer">
-        <br>
+    <!-- <div id="speechContainer">
+        <br>    
         <h3>Step 3 - Upload your .wav file</h3> 
 
         <form method="post" enctype="multipart/form-data">
@@ -54,9 +56,16 @@
             </div>
         {% endif %}
 
+    </div> -->
+
+
+    <div id="prediction_container">
+        <h3 id="prediction_title">Prediction</h3>
+        <div id="prediction_text">
+            <p id="prediction_text_p">Your prediction will appear after recording</p>
+        </div>
+
     </div>
-
-
 
 
 

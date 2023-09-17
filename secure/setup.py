@@ -6,7 +6,9 @@ setup(
     packages=find_packages(include=['app']),
     test_suite = 'test',
     install_requires=[
-        "flask >= 2.0.0"
+        "flask >= 2.0.0",
+        "torch >= 1.9.0",
+        "transformers >= 4.9.0"
     ],
     python_requires='>=3.6'
 )
