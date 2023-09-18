@@ -7,6 +7,10 @@ RUN apk add bash
 COPY --chown=nginx:nginx nginx.conf /etc/nginx/nginx.conf
 COPY --chown=nginx:nginx start.sh /app/start.sh
 
+COPY --chown=nginx:nginx cert.pem /etc/ssl/certs/cert.pem
+COPY --chown=nginx:nginx key.pem /etc/ssl/certs/key.pem
+
+
 # set workdir
 WORKDIR /app
 
