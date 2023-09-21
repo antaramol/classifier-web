@@ -13,17 +13,22 @@ services:
       - "traefik.enable=true"
       - "traefik.backend=flask"
       - "traefik.frontend.rule=Host: classifier.site, www.classifier.site"
-      - "traefik.port=8000"
+      # - "traefik.port=80"
     networks:
       - web
   traefik:
     image: traefik:v1.7.16-alpine
+    environment:
+      TRAEFIK_DASHBOARD_PASSWD: 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik/traefik.toml:/etc/traefik/traefik.toml:ro
-      - ./traefik/acme/:/etc/traefik/acme/
+      - ./traefik/acme/acme.json:/etc/traefik/acme/acme.json
     labels:
       - "traefik.frontend.rule=Host: monitor.classifier.site"
       - "traefik.port=8080"
     networks:
       - web
+    ports:
+      - "80:80"
+      - "443:443"
