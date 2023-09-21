@@ -1,20 +1,29 @@
-version: '2'
+version: '3'
+
+networks:
+  web:
+    external: true
+
 services:
   flask:
     build: ./flask
     image: flask
-    command: gunicorn -w 3 -t 60 -b 0.0.0.0:5000 app:app
+    command: gunicorn -w 3 -t 60 -b 0.0.0.0:8000 app:app
     labels:
       - "traefik.enable=true"
       - "traefik.backend=flask"
-      - "traefik.frontend.rule=Host: classifier-web.com, www.classifier-web.com"
+      - "traefik.frontend.rule=Host: classifier.site, www.classifier.site"
+      - "traefik.port=8000"
+    networks:
+      - web
   traefik:
-    image: traefik:v1.7.16
+    image: traefik:v1.7.16-alpine
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./traefik/traefik.toml:/etc/traefik/traefik.toml:ro
-      - ./traefik/acme:/etc/traefik/acme
-    ports:
-     - "80:80"
-     - "443:443"
-     - "8080:8080"
+      - ./traefik/acme/:/etc/traefik/acme/
+    labels:
+      - "traefik.frontend.rule=Host: monitor.classifier.site"
+      - "traefik.port=8080"
+    networks:
+      - web
