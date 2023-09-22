@@ -3,9 +3,19 @@
 # Global configuration
 ################################################################
 
+# Log level
+#
+# Optional
+# Default: "ERROR"
+# Accepted values, in order of severity: "DEBUG", "INFO", "WARN", "ERROR", "FATAL", "PANIC"
+# Messages at and above the selected level will be logged.
+#
+logLevel = "ERROR"
+
+# Entrypoints to be used by frontends that do not specify any entrypoint.
+# Each frontend can specify its own entrypoints.
 defaultEntryPoints = ["http", "https"]
 
-<<<<<<< HEAD:traefik/traefik.toml
 # [web]
 # # Port for the status page
 # address = ":8080"
@@ -14,20 +24,12 @@ defaultEntryPoints = ["http", "https"]
 [entryPoints]
   
   # http should be redirected to https
-=======
-[entryPoints]
-  [entryPoints.dashboard]
-    address = ":8080"
-    [entryPoints.dashboard.auth]
-      [entryPoints.dashboard.auth.basic]
-        users = ["admin:$apr1$4HpEY3Ul$lNUc7FjVV4qNt0xmBrglx1"]
->>>>>>> main:traefik/traefik/traefik.toml
   [entryPoints.http]
-    address = ":80"
-      [entryPoints.http.redirect]
-        entryPoint = "https"
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  # https is the default
   [entryPoints.https]
-<<<<<<< HEAD:traefik/traefik.toml
   address = ":443"
     [entryPoints.https.tls]
   [entryPoints.dashboard]
@@ -39,19 +41,23 @@ defaultEntryPoints = ["http", "https"]
 [api]
 entryPoint = "dashboard"
 
-=======
-    address = ":443"
-      [entryPoints.https.tls]
 
-[api]
-entrypoint="dashboard"
->>>>>>> main:traefik/traefik/traefik.toml
-
+# Enable ACME (Let's Encrypt): automatic SSL
 [acme]
+# Email address used for registration
 email = "antonjaragon@gmail.com"
+# File or key used for certificates storage.
+# WARNING, if you use Traefik in Docker, you have 2 options:
+#  - create a file on your host and mount it as a volume
+#      storageFile = "acme.json"
+#      $ docker run -v "/my/host/acme.json:acme.json" traefik
+#  - mount the folder containing the file as a volume
+#      storageFile = "/etc/traefik/acme/acme.json"
+#      $ docker run -v "/my/host/acme:/etc/traefik/acme" traefik
 storageFile = "/etc/traefik/acme/acme.json"
+# Entrypoint to proxy acme challenge/apply certificates to.
+# WARNING, must point to an entrypoint on port 443
 entryPoint = "https"
-<<<<<<< HEAD:traefik/traefik.toml
 # CA server to use
 # Uncomment the line to run on the staging let's encrypt server
 # Leave comment to go to prod
@@ -65,14 +71,14 @@ onDemand = true
 OnHostRule = true
 # Use a HTTP-01 acme challenge rather than TLS-SNI-01 challenge
 # Optional but recommend
-=======
-onHostRule = true
->>>>>>> main:traefik/traefik/traefik.toml
   [acme.httpChallenge]
+  # EntryPoint to use for the challenges.
+  # Required
   entryPoint = "http"
 
+
+# Enable Docker configuration backend
 [docker]
-<<<<<<< HEAD:traefik/traefik.toml
 # Docker server endpoint. Can be a tcp or a unix socket endpoint.
 # endpoint = "unix:///var/run/docker.sock"
 # Default domain used.
@@ -84,8 +90,3 @@ watch = true
 # If set to false, containers that don't have `traefik.enable=true` will be ignored
 exposedbydefault = true
 # network = "web"
-=======
-domain = "classifier.site"
-watch = true
-network = "web"
->>>>>>> main:traefik/traefik/traefik.toml
