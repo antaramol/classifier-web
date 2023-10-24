@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.10.13
 
 RUN apt update && apt upgrade -y
 RUN apt install -y ffmpeg
@@ -28,6 +28,8 @@ RUN export FLASK_APP=app.py
 
 # upgrade pip
 RUN pip install --upgrade pip
+
+RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
 # RUN pip install 'transformers[torch]'
 
