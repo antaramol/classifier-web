@@ -9,7 +9,7 @@ pipe = pipeline("audio-classification", model="antonjaragon/emotions_6_classes_s
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    transcript = ""
+    predict = ""
     if request.method == "POST":
         print("FORM DATA RECEIVED")
 
@@ -21,17 +21,12 @@ def index():
             return redirect(request.url)
 
         if file:
-            # recognizer = sr.Recognizer()
-            # audioFile = sr.AudioFile(file)
-            # with audioFile as source:
-            #     data = recognizer.record(source)
-            # transcript = recognizer.recognize_google(data, key=None)
-
-            transcript = pipe(file.filename)
+            
+            predict = pipe(file.filename)
 
 
 
-    return render_template('index.html', transcript=transcript)
+    return render_template('index.html')
 
 @app.route('/save_recording', methods=['POST'])
 def upload():
@@ -55,7 +50,7 @@ def upload():
 
 @app.route('/cache-me')
 def cache():
-	return "nginx will cache this response"
+	return "server will cache this response"
 
 @app.route('/info')
 def info():
@@ -72,7 +67,3 @@ def info():
 @app.route('/flask-health-check')
 def flask_health_check():
 	return "success"
-
-@app.route('/hello-papa')
-def hello_papa():
-	return render_template('hello-papa.html')
