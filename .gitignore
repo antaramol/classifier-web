@@ -44,3 +44,4 @@ microblog.log*
 acme.json
 
 output.wav
+.env
