@@ -51,7 +51,7 @@ function startRecording() {
 		// "Format: 2 channel mp3 @ 44kHz"
 
 		// Change text of element with id="recording_prompt" to "RECORDING"
-		document.getElementById("formats").innerHTML="Format: 2 channel "+encodingTypeSelect.options[encodingTypeSelect.selectedIndex].value+" @ "+audioContext.sampleRate/1000+"kHz"
+		// document.getElementById("formats").innerHTML="Format: 2 channel "+encodingTypeSelect.options[encodingTypeSelect.selectedIndex].value+" @ "+audioContext.sampleRate/1000+"kHz"
 		document.getElementById("recording_prompt").innerHTML="RECORDING";
 
 
